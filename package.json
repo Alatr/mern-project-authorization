@@ -1,0 +1,28 @@
+{
+  "name": "mern-project-authorization",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "authorization with using MERN stack",
+  "main": "backend/server.js",
+  "scripts": {
+    "start": "node backend/server.js", 
+    "server": "nodemon backend/server.js", 
+    "client": "npm start --prefix frontend", 
+    "dev": "concurrently \"npm run server\" \"npm run client\""
+  },
+  "keywords": [
+    "node",
+    "react"
+  ],
+  "author": "Dmytro Lukianov",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "mongoose": "^6.1.1"
+  },
+  "devDependencies": {
+    "concurrently": "^6.4.0",
+    "nodemon": "^2.0.15"
+  }
+}
