@@ -1,3 +1,4 @@
+import { ExceptionFilter } from "./../errors/exception.filter";
 import { UserController } from "./users/controller";
 import { LoggerService } from "./services/logger";
 import * as dotenv from "dotenv";
@@ -45,19 +46,31 @@ export class App {
   port: number;
   logger: LoggerService;
   userController: UserController;
+  exceptionFilter: ExceptionFilter;
 
-  constructor(logger: LoggerService, userController: UserController) {
+  constructor(
+    logger: LoggerService,
+    userController: UserController,
+    exceptionFilter: ExceptionFilter
+  ) {
     this.app = express();
     this.port = Number(process.env.PORT) || 5002;
     this.logger = logger;
     this.userController = userController;
+    this.exceptionFilter = exceptionFilter;
   }
 
   useRoutes() {
     this.app.use(this.userController.router);
   }
+
+  useExceptionFilter() {
+    this.app.use(this.exceptionFilter.catch.bind(this.exceptionFilter));
+  }
+
   public init() {
     this.useRoutes();
+    this.useExceptionFilter();
     this.app.listen(PORT, () =>
       this.logger.log(
         `Server started on PORT: ${PORT} http://localhost:${PORT}`
