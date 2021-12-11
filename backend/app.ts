@@ -1,6 +1,6 @@
 import { ExceptionFilter } from "./../errors/exception.filter";
 import { UserController } from "./users/controller";
-import { LoggerService } from "./services/logger";
+import { ILogger } from "./services/logger";
 import * as dotenv from "dotenv";
 dotenv.config();
 import express, { NextFunction, Request, Response, Express } from "express";
@@ -44,12 +44,12 @@ const PORT = process.env.PORT || 5002;
 export class App {
   app: Express;
   port: number;
-  logger: LoggerService;
+  logger: ILogger;
   userController: UserController;
   exceptionFilter: ExceptionFilter;
 
   constructor(
-    logger: LoggerService,
+    logger: ILogger,
     userController: UserController,
     exceptionFilter: ExceptionFilter
   ) {
