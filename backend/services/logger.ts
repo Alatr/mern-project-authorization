@@ -1,4 +1,6 @@
+import { injectable } from "inversify";
 import { Logger } from "tslog";
+import "reflect-metadata";
 
 export interface ILogger {
   logger: unknown;
@@ -7,6 +9,7 @@ export interface ILogger {
   error: (...args: unknown[]) => void;
 }
 
+@injectable()
 export class LoggerService implements ILogger {
   public logger: Logger;
 

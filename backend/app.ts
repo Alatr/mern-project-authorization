@@ -4,6 +4,8 @@ import { ILogger } from "./services/logger";
 import * as dotenv from "dotenv";
 dotenv.config();
 import express, { Express } from "express";
+import { inject, injectable } from "inversify";
+import { TYPES } from "./common/types";
 
 // import cors from 'cors';
 // import cookieParser from 'cookie-parser';
@@ -39,17 +41,15 @@ const PORT = Number(process.env.PORT) || 5002;
 //   }
 // };
 
+@injectable()
 export class App {
   app: Express;
   port: number;
-  logger: ILogger;
-  userController: UserController;
-  exceptionFilter: ExceptionFilter;
 
   constructor(
-    logger: ILogger,
-    userController: UserController,
-    exceptionFilter: ExceptionFilter
+    @inject(TYPES.ILogger) private logger: ILogger,
+    @inject(TYPES.UserController) private userController: UserController,
+    @inject(TYPES.IExceptionFilter) private exceptionFilter: ExceptionFilter
   ) {
     this.app = express();
     this.port = PORT;
