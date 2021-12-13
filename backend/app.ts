@@ -6,6 +6,7 @@ dotenv.config();
 import express, { Express } from "express";
 import { inject, injectable } from "inversify";
 import { TYPES } from "./common/types";
+import { json } from "body-parser";
 
 // import cors from 'cors';
 // import cookieParser from 'cookie-parser';
@@ -58,6 +59,10 @@ export class App {
     this.exceptionFilter = exceptionFilter;
   }
 
+  useMiddleware(): void {
+    this.app.use(json());
+  }
+
   useRoutes() {
     this.app.use(this.userController.router);
   }
@@ -67,6 +72,7 @@ export class App {
   }
 
   public init() {
+    this.useMiddleware();
     this.useRoutes();
     this.useExceptionFilter();
     this.app.listen(PORT, () =>

@@ -1,3 +1,5 @@
+import { UserRegistrationDto } from "./dto/register";
+import { UserLoginDto } from "./dto/login";
 import { ILogger } from "./../services/logger";
 import { BaseController } from "../common/base.controller";
 import { NextFunction, Request, Response } from "express";
@@ -28,12 +30,20 @@ export class UserController extends BaseController implements IUserController {
     ]);
   }
 
-  login(req: Request, res: Response, next: NextFunction) {
+  login(req: Request<{}, {}, UserLoginDto>, res: Response, next: NextFunction) {
     // this.ok(res, "login");
+    console.log(req.body);
+
     next(new HTTPError(401, "auto error", "login"));
   }
 
-  register(req: Request, res: Response, next: NextFunction) {
+  register(
+    req: Request<{}, {}, UserRegistrationDto>,
+    res: Response,
+    next: NextFunction
+  ) {
+    console.log(req.body);
+
     this.ok(res, "register");
   }
 }

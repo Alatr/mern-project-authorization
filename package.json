@@ -17,6 +17,7 @@
   "author": "Dmytro Lukianov",
   "license": "ISC",
   "dependencies": {
+    "body-parser": "^1.19.1",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "inversify": "^6.0.1",
