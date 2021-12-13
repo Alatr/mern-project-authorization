@@ -1,0 +1,21 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+
+    {
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "${workspaceFolder}/node_modules/nodemon/bin/nodemon.js",
+      "restart": true,
+      "name": "Debug TypeScript in Node.js",
+      "internalConsoleOptions": "neverOpen",
+      "console": "integratedTerminal"
+      
+      // "args": ["--watch", "dist"],
+      // "preLaunchTask": "typescript",
+      // "program": "${workspaceFolder}/start.js",
+      // "cwd": "${workspaceFolder}",
+      // "protocol": "inspector",
+      // "outFiles": ["${workspaceFolder}/dist/**/*.js"],
+    }]
+}
