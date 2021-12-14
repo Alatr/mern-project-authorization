@@ -7,6 +7,8 @@ import { HTTPError } from "../../errors/http-error";
 import { TYPES } from "../common/types";
 import { inject, injectable } from "inversify";
 import "reflect-metadata";
+import { User } from "./entity";
+import { IUserService } from "./service";
 
 export interface IUserController {
   login: (req: Request, res: Response, next: NextFunction) => void;
@@ -14,7 +16,10 @@ export interface IUserController {
 }
 @injectable()
 export class UserController extends BaseController implements IUserController {
-  constructor(@inject(TYPES.ILogger) private loggerService: ILogger) {
+  constructor(
+    @inject(TYPES.ILogger) private loggerService: ILogger,
+    @inject(TYPES.IUserService) private userService: IUserService
+  ) {
     super(loggerService);
     this.bindRoutes([
       {
@@ -37,13 +42,16 @@ export class UserController extends BaseController implements IUserController {
     next(new HTTPError(401, "auto error", "login"));
   }
 
-  register(
-    req: Request<{}, {}, UserRegistrationDto>,
+  async register(
+    { body }: Request<{}, {}, UserRegistrationDto>,
     res: Response,
     next: NextFunction
-  ) {
-    console.log(req.body);
-
-    this.ok(res, "register");
+  ): Promise<void> {
+    console.log(body);
+    const result = await this.userService.createUser(body);
+    if (!result) {
+      return next(new HTTPError(422, "user already exist"));
+    }
+    this.ok(res, result);
   }
 }
