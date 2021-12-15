@@ -5,12 +5,16 @@ import { ExceptionFilter, IExceptionFilter } from "./errors/exception.filter";
 import { Container, ContainerModule, interfaces } from "inversify";
 import { TYPES } from "./common/types";
 import { UserService, IUserService } from "./users/service";
+import { ConfigService, IConfigService } from "../config/service";
 
 export const appBindings = new ContainerModule((bind: interfaces.Bind) => {
-  bind<ILogger>(TYPES.ILogger).to(LoggerService);
+  bind<ILogger>(TYPES.ILogger).to(LoggerService).inSingletonScope();
   bind<IExceptionFilter>(TYPES.IExceptionFilter).to(ExceptionFilter);
   bind<IUserController>(TYPES.UserController).to(UserController);
   bind<IUserService>(TYPES.IUserService).to(UserService);
+  bind<IConfigService>(TYPES.ConfigService)
+    .to(ConfigService)
+    .inSingletonScope();
   bind<App>(TYPES.Application).to(App);
 });
 

@@ -1,5 +1,6 @@
-import { ExceptionFilter } from "./errors/exception.filter";
-import { UserController } from "./users/controller";
+import { ConfigService, IConfigService } from "./../config/service";
+import { ExceptionFilter, IExceptionFilter } from "./errors/exception.filter";
+import { IUserController, UserController } from "./users/controller";
 import { ILogger } from "./services/logger";
 import * as dotenv from "dotenv";
 dotenv.config();
@@ -50,13 +51,15 @@ export class App {
   constructor(
     @inject(TYPES.ILogger) private logger: ILogger,
     @inject(TYPES.UserController) private userController: UserController,
-    @inject(TYPES.IExceptionFilter) private exceptionFilter: ExceptionFilter
+    @inject(TYPES.IExceptionFilter) private exceptionFilter: IExceptionFilter,
+    @inject(TYPES.ConfigService) private configService: IConfigService
   ) {
     this.app = express();
     this.port = PORT;
     this.logger = logger;
     this.userController = userController;
     this.exceptionFilter = exceptionFilter;
+    this.configService = configService;
   }
 
   useMiddleware(): void {
