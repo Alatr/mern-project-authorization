@@ -1,3 +1,4 @@
+import { ValidateMiddleware } from "./../middlewares/validate";
 import { UserRegistrationDto } from "./dto/register";
 import { UserLoginDto } from "./dto/login";
 import { ILogger } from "./../services/logger";
@@ -26,11 +27,13 @@ export class UserController extends BaseController implements IUserController {
         path: "/register",
         method: "post",
         func: this.register,
+        middleware: [new ValidateMiddleware(UserRegistrationDto)],
       },
       {
         path: "/login",
         method: "post",
         func: this.login,
+        middleware: [],
       },
     ]);
   }
@@ -47,7 +50,6 @@ export class UserController extends BaseController implements IUserController {
     res: Response,
     next: NextFunction
   ): Promise<void> {
-    console.log(body);
     const result = await this.userService.createUser(body);
     if (!result) {
       return next(new HTTPError(422, "user already exist"));

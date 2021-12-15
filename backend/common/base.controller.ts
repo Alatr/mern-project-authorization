@@ -3,10 +3,14 @@ import { NextFunction, Router, Request, Response } from "express";
 import { injectable } from "inversify";
 import "reflect-metadata";
 
+export interface IMiddleware {
+  execute: (req: Request, res: Response, next: NextFunction) => void;
+}
 interface IControllerRoute {
   path: string;
   func: (req: Request, res: Response, next: NextFunction) => void;
   method: keyof Pick<Router, "get" | "post" | "delete" | "put" | "patch">;
+  middleware?: IMiddleware[];
 }
 
 @injectable()
@@ -34,7 +38,10 @@ export abstract class BaseController {
   protected bindRoutes(routes: IControllerRoute[]) {
     for (const route of routes) {
       this.logger.log(`[${route.method}] ${route.path}`);
-      this._router[route.method](route.path, route.func.bind(this));
+      const middleware = route.middleware?.map((el) => el.execute.bind(el));
+      const handler = route.func.bind(this);
+      const pipeline = middleware ? [...middleware, handler] : handler;
+      this._router[route.method](route.path, pipeline);
     }
   }
 }
