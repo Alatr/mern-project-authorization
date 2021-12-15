@@ -3,7 +3,7 @@ import { UserLoginDto } from "./dto/login";
 import { ILogger } from "./../services/logger";
 import { BaseController } from "../common/base.controller";
 import { NextFunction, Request, Response } from "express";
-import { HTTPError } from "../../errors/http-error";
+import { HTTPError } from "../errors/http-error";
 import { TYPES } from "../common/types";
 import { inject, injectable } from "inversify";
 import "reflect-metadata";

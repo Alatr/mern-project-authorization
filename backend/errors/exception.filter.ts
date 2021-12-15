@@ -1,5 +1,5 @@
-import { TYPES } from "./../backend/common/types";
-import { ILogger } from "./../backend/services/logger";
+import { TYPES } from "../common/types";
+import { ILogger } from "../services/logger";
 import { NextFunction, Request, Response } from "express";
 import { HTTPError } from "./http-error";
 import { inject, injectable } from "inversify";

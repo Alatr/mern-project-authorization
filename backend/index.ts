@@ -1,7 +1,7 @@
 import { ILogger, LoggerService } from "./services/logger";
 import { App } from "./app";
 import { IUserController, UserController } from "./users/controller";
-import { ExceptionFilter, IExceptionFilter } from "../errors/exception.filter";
+import { ExceptionFilter, IExceptionFilter } from "./errors/exception.filter";
 import { Container, ContainerModule, interfaces } from "inversify";
 import { TYPES } from "./common/types";
 import { UserService, IUserService } from "./users/service";

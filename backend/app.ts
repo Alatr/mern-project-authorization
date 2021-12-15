@@ -1,4 +1,4 @@
-import { ExceptionFilter } from "./../errors/exception.filter";
+import { ExceptionFilter } from "./errors/exception.filter";
 import { UserController } from "./users/controller";
 import { ILogger } from "./services/logger";
 import * as dotenv from "dotenv";
