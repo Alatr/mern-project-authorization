@@ -7,6 +7,7 @@ import { TYPES } from "./common/types";
 import { UserService, IUserService } from "./users/service";
 import { ConfigService, IConfigService } from "../config/service";
 import { IDatabaseService, DatabaseService } from "./common/database";
+import { IUserRepository, UserRepository } from "./users/repository";
 
 export const appBindings = new ContainerModule((bind: interfaces.Bind) => {
   bind<ILogger>(TYPES.ILogger).to(LoggerService).inSingletonScope();
@@ -18,6 +19,9 @@ export const appBindings = new ContainerModule((bind: interfaces.Bind) => {
     .inSingletonScope();
   bind<IDatabaseService>(TYPES.DatabaseService)
     .to(DatabaseService)
+    .inSingletonScope();
+  bind<IUserRepository>(TYPES.UserRepository)
+    .to(UserRepository)
     .inSingletonScope();
   bind<App>(TYPES.Application).to(App);
 });
