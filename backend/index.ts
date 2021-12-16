@@ -6,6 +6,7 @@ import { Container, ContainerModule, interfaces } from "inversify";
 import { TYPES } from "./common/types";
 import { UserService, IUserService } from "./users/service";
 import { ConfigService, IConfigService } from "../config/service";
+import { IDatabaseService, DatabaseService } from "./common/database";
 
 export const appBindings = new ContainerModule((bind: interfaces.Bind) => {
   bind<ILogger>(TYPES.ILogger).to(LoggerService).inSingletonScope();
@@ -14,6 +15,9 @@ export const appBindings = new ContainerModule((bind: interfaces.Bind) => {
   bind<IUserService>(TYPES.IUserService).to(UserService);
   bind<IConfigService>(TYPES.ConfigService)
     .to(ConfigService)
+    .inSingletonScope();
+  bind<IDatabaseService>(TYPES.DatabaseService)
+    .to(DatabaseService)
     .inSingletonScope();
   bind<App>(TYPES.Application).to(App);
 });
