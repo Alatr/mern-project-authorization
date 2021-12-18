@@ -8,7 +8,6 @@ import { HTTPError } from "../errors/http-error";
 import { TYPES } from "../common/types";
 import { inject, injectable } from "inversify";
 import "reflect-metadata";
-import { User } from "./entity";
 import { IUserService } from "./service";
 
 export interface IUserController {
@@ -33,16 +32,21 @@ export class UserController extends BaseController implements IUserController {
         path: "/login",
         method: "post",
         func: this.login,
-        middleware: [],
+        middleware: [new ValidateMiddleware(UserLoginDto)],
       },
     ]);
   }
 
-  login(req: Request<{}, {}, UserLoginDto>, res: Response, next: NextFunction) {
-    // this.ok(res, "login");
-    console.log(req.body);
-
-    next(new HTTPError(401, "auto error", "login"));
+  async login(
+    { body }: Request<{}, {}, UserLoginDto>,
+    res: Response,
+    next: NextFunction
+  ) {
+    const result = await this.userService.validateUser(body);
+    if (!result) {
+      return next(new HTTPError(401, "auto error", "login"));
+    }
+    this.ok(res, result);
   }
 
   async register(

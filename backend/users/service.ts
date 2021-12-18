@@ -10,7 +10,7 @@ import { ILogger } from "../services/logger";
 
 export interface IUserService {
   createUser: (dto: UserRegistrationDto) => Promise<IUserModel | null>;
-  validateUser: (dto: UserLoginDto) => Promise<boolean>;
+  validateUser: (dto: UserLoginDto) => Promise<boolean | null>;
 }
 
 @injectable()
@@ -37,7 +37,22 @@ export class UserService implements IUserService {
 
     return await this.userRepository.create(newUser);
   }
-  async validateUser(dto: UserLoginDto): Promise<boolean> {
-    return true;
+  async validateUser({
+    email,
+    password,
+  }: UserLoginDto): Promise<boolean | null> {
+    const existUser = await this.userRepository.find(email);
+    if (!existUser) {
+      this.logger.log("[User] User not exist");
+      return null;
+    }
+    const salt = this.configService.get("SALT");
+    const currentUser = new User(
+      existUser?.email,
+      existUser?.name,
+      existUser?.password
+    );
+
+    return currentUser.comparePassword(password);
   }
 }
