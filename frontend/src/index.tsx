@@ -1,6 +1,10 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import "./index.css";
-import App from "./App";
+import "antd/dist/antd.css";
+import { render } from "react-dom";
+import init from "./init";
 
-ReactDOM.render(<App />, document.getElementById("root"));
+const run = async () => {
+  const vdom = await init();
+  render(vdom, document.getElementById("root"));
+};
+
+run();
