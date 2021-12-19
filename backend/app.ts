@@ -1,3 +1,4 @@
+import { GuardMiddleware } from "./middlewares/guard";
 import { AuthMiddleware } from "./middlewares/auth";
 import { IDatabaseService } from "./common/database";
 import { IConfigService } from "./../config/service";

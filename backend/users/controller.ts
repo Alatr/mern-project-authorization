@@ -11,6 +11,7 @@ import "reflect-metadata";
 import { IUserService } from "./service";
 import { sign } from "jsonwebtoken";
 import { IConfigService } from "../../config/service";
+import { GuardMiddleware } from "../middlewares/guard";
 
 export interface IUserController {
   login: (req: Request, res: Response, next: NextFunction) => void;
@@ -41,7 +42,7 @@ export class UserController extends BaseController implements IUserController {
         path: "/info",
         method: "get",
         func: this.info,
-        middleware: [],
+        middleware: [new GuardMiddleware()],
       },
     ]);
   }
@@ -78,7 +79,8 @@ export class UserController extends BaseController implements IUserController {
     res: Response,
     next: NextFunction
   ): Promise<void> {
-    this.ok(res, { email: user });
+    const result = await this.userService.getInfo(user);
+    this.ok(res, { email: result?.email, id: result?.id });
   }
 
   private signJWT(email: string, secret: string): Promise<string> {

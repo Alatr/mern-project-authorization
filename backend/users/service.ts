@@ -11,6 +11,7 @@ import { ILogger } from "../services/logger";
 export interface IUserService {
   createUser: (dto: UserRegistrationDto) => Promise<IUserModel | null>;
   validateUser: (dto: UserLoginDto) => Promise<boolean | null>;
+  getInfo: (email: string) => Promise<IUserModel | null>;
 }
 
 @injectable()
@@ -54,5 +55,8 @@ export class UserService implements IUserService {
     );
 
     return currentUser.comparePassword(password);
+  }
+  async getInfo(email: string): Promise<IUserModel | null> {
+    return await this.userRepository.find(email);
   }
 }
