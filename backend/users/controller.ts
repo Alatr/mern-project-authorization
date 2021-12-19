@@ -37,6 +37,12 @@ export class UserController extends BaseController implements IUserController {
         func: this.login,
         middleware: [new ValidateMiddleware(UserLoginDto)],
       },
+      {
+        path: "/info",
+        method: "get",
+        func: this.info,
+        middleware: [],
+      },
     ]);
   }
 
@@ -66,6 +72,13 @@ export class UserController extends BaseController implements IUserController {
       return next(new HTTPError(422, "user already exist"));
     }
     this.ok(res, result);
+  }
+  async info(
+    { user }: Request<{}, {}, UserRegistrationDto>,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    this.ok(res, { email: user });
   }
 
   private signJWT(email: string, secret: string): Promise<string> {

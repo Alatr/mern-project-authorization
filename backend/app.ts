@@ -1,18 +1,13 @@
+import { AuthMiddleware } from "./middlewares/auth";
 import { IDatabaseService } from "./common/database";
-import { ConfigService, IConfigService } from "./../config/service";
-import { ExceptionFilter, IExceptionFilter } from "./errors/exception.filter";
-import { IUserController, UserController } from "./users/controller";
+import { IConfigService } from "./../config/service";
+import { IExceptionFilter } from "./errors/exception.filter";
+import { UserController } from "./users/controller";
 import { ILogger } from "./services/logger";
 import express, { Express } from "express";
 import { inject, injectable } from "inversify";
 import { TYPES } from "./common/types";
 import { json } from "body-parser";
-
-// import cors from 'cors';
-// import cookieParser from 'cookie-parser';
-// import mongoose from 'mongoose';
-// import router from './router/index.js';
-// import errorMiddleware from './middlewares/error-middleware.js';
 
 @injectable()
 export class App {
@@ -36,6 +31,10 @@ export class App {
 
   useMiddleware(): void {
     this.app.use(json());
+    const authMiddleware = new AuthMiddleware(
+      this.configService.get("JWT_SECRET")
+    );
+    this.app.use(authMiddleware.execute.bind(authMiddleware));
   }
 
   useRoutes() {

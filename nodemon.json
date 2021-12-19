@@ -1,8 +1,7 @@
 
 {
-  "restartable": "rs",
   "ignore": [".git", "node_modules/", "dist/", "coverage/, frontend/"],
-  "watch": ["backend/"],
-  "execMap": {},
-  "ext": "js,json,ts"
+
+  "ext": "js,json,ts",
+  "exec": "ts-node --files ./backend/index.ts"
 }
