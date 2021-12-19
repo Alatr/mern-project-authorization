@@ -9,6 +9,8 @@ import { TYPES } from "../common/types";
 import { inject, injectable } from "inversify";
 import "reflect-metadata";
 import { IUserService } from "./service";
+import { sign } from "jsonwebtoken";
+import { IConfigService } from "../../config/service";
 
 export interface IUserController {
   login: (req: Request, res: Response, next: NextFunction) => void;
@@ -18,7 +20,8 @@ export interface IUserController {
 export class UserController extends BaseController implements IUserController {
   constructor(
     @inject(TYPES.ILogger) private loggerService: ILogger,
-    @inject(TYPES.IUserService) private userService: IUserService
+    @inject(TYPES.IUserService) private userService: IUserService,
+    @inject(TYPES.ConfigService) private configService: IConfigService
   ) {
     super(loggerService);
     this.bindRoutes([
@@ -46,7 +49,11 @@ export class UserController extends BaseController implements IUserController {
     if (!result) {
       return next(new HTTPError(401, "auto error", "login"));
     }
-    this.ok(res, result);
+    const jwt = await this.signJWT(
+      body.email,
+      this.configService.get("JWT_SECRET")
+    );
+    this.ok(res, { jwt });
   }
 
   async register(
@@ -59,5 +66,21 @@ export class UserController extends BaseController implements IUserController {
       return next(new HTTPError(422, "user already exist"));
     }
     this.ok(res, result);
+  }
+
+  private signJWT(email: string, secret: string): Promise<string> {
+    return new Promise<string>((res, rej) => {
+      sign(
+        { email, iat: Math.floor(Date.now()) },
+        secret,
+        { algorithm: "HS256" },
+        (err, token) => {
+          if (err) {
+            rej(err);
+          }
+          res(token as string);
+        }
+      );
+    });
   }
 }
