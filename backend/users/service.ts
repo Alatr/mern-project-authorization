@@ -47,7 +47,7 @@ export class UserService implements IUserService {
       this.logger.log("[User] User not exist");
       return null;
     }
-    const salt = this.configService.get("SALT");
+
     const currentUser = new User(
       existUser?.email,
       existUser?.name,
