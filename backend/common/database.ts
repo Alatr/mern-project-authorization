@@ -51,5 +51,7 @@ export class DatabaseService implements IDatabaseService {
       }
     }
   }
-  async disconnect(): Promise<void> {}
+  async disconnect(): Promise<void> {
+    await this.database.disconnect();
+  }
 }

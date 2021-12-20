@@ -1,18 +1,19 @@
-import { GuardMiddleware } from "./middlewares/guard";
+import express, { Express } from "express";
+import { inject, injectable } from "inversify";
+import { json } from "body-parser";
+import { Server } from "http";
+import { TYPES } from "./common/types";
 import { AuthMiddleware } from "./middlewares/auth";
 import { IDatabaseService } from "./common/database";
 import { IConfigService } from "./../config/service";
 import { IExceptionFilter } from "./errors/exception.filter";
 import { UserController } from "./users/controller";
 import { ILogger } from "./services/logger";
-import express, { Express } from "express";
-import { inject, injectable } from "inversify";
-import { TYPES } from "./common/types";
-import { json } from "body-parser";
 
 @injectable()
 export class App {
   app: Express;
+  server: Server;
   port: number;
 
   constructor(
@@ -51,8 +52,11 @@ export class App {
     this.useRoutes();
     this.useExceptionFilter();
     await this.databaseService.connect();
-    this.app.listen(this.port, () =>
-      this.logger.log(`Server started on http://localhost:${this.port}`)
-    );
+    this.server = this.app.listen(this.port);
+    this.logger.log(`Server started on http://localhost:${this.port}`);
+  }
+  public async close(): Promise<void> {
+    this.server.close();
+    this.databaseService.disconnect();
   }
 }
