@@ -23,7 +23,7 @@ Start the server
 ```
 
 
-## Run Tesst
+## Run Test
 
 To run tests, run the following command
 
